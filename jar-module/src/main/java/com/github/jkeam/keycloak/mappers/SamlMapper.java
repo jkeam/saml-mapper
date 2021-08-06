@@ -32,36 +32,6 @@ public class SamlMapper extends AbstractProviderMapper implements IdentityProvid
     public static final String ATTRIBUTE_FRIENDLY_NAME = "attribute.friendly.name";
     public static final String ATTRIBUTE_VALUE = "attribute.value";
 
-    /*
-    static {
-        ProviderConfigProperty property;
-        property = new ProviderConfigProperty();
-        property.setName(ATTRIBUTE_NAME);
-        property.setLabel("Attribute Name");
-        property.setHelpText("Name of attribute to search for in assertion.  You can leave this blank and specify a friendly name instead.");
-        property.setType(ProviderConfigProperty.STRING_TYPE);
-        configProperties.add(property);
-        property = new ProviderConfigProperty();
-        property.setName(ATTRIBUTE_FRIENDLY_NAME);
-        property.setLabel("Friendly Name");
-        property.setHelpText("Friendly name of attribute to search for in assertion.  You can leave this blank and specify a name instead.");
-        property.setType(ProviderConfigProperty.STRING_TYPE);
-        configProperties.add(property);
-        property = new ProviderConfigProperty();
-        property.setName(ATTRIBUTE_VALUE);
-        property.setLabel("Attribute Value");
-        property.setHelpText("Value the attribute must have.  If the attribute is a list, then the value must be contained in the list.");
-        property.setType(ProviderConfigProperty.STRING_TYPE);
-        configProperties.add(property);
-        property = new ProviderConfigProperty();
-        property.setName("group");
-        property.setLabel("Group");
-        property.setHelpText("Group to grant to user. i.e. /Group1/SubGroup2");
-        property.setType(ProviderConfigProperty.STRING_TYPE);
-        configProperties.add(property);
-    }
-   */
-
     @Override
     public SamlMapper create(KeycloakSession session) {
         return new SamlMapper();
@@ -100,12 +70,6 @@ public class SamlMapper extends AbstractProviderMapper implements IdentityProvid
     @Override
     public void importNewUser(KeycloakSession session, RealmModel realm, UserModel user, IdentityProviderMapperModel mapperModel, BrokeredIdentityContext context) {
         logger.info("importNewUser");
-//        String groupName = mapperModel.getConfig().get("group");
-//        if (isAttributePresent(mapperModel, context)) {
-//            GroupModel group = KeycloakModelUtils.findGroupByPath(realm, groupName);
-//            if (group == null) throw new IdentityBrokerException("Unable to find group: " + groupName);
-//            user.joinGroup(group);
-//        }
         user.setSingleAttribute("enriched", "yes");
         logger.info(user);
     }
@@ -119,14 +83,6 @@ public class SamlMapper extends AbstractProviderMapper implements IdentityProvid
     @Override
     public void updateBrokeredUser(KeycloakSession session, RealmModel realm, UserModel user, IdentityProviderMapperModel mapperModel, BrokeredIdentityContext context) {
         logger.info("updateBrokeredUser");
-//        String groupName = mapperModel.getConfig().get("group");
-//        GroupModel group = KeycloakModelUtils.findGroupByPath(realm, groupName);
-//        if (group == null) throw new IdentityBrokerException("Unable to find group: " + groupName);
-//        if (!isAttributePresent(mapperModel, context)) {
-//            user.leaveGroup(group);ProviderConfigProperty
-//        } else {
-//            user.joinGroup(group);
-//        }
         user.setSingleAttribute("enriched", "yes");
         logger.info(user);
     }

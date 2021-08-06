@@ -17,6 +17,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Custom user to save in the database.
+ *
+ * @author jkeam
+ */
 class CustomUser extends AbstractUserAdapter {
     private static final Logger log = LoggerFactory.getLogger(CustomUser.class);
     public static final String BIRTHDAY_FORMAT = "yyyy-MM-dd";

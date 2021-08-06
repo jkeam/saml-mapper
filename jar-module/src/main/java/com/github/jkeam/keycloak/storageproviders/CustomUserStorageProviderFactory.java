@@ -16,6 +16,11 @@ import java.util.List;
 
 import static com.github.jkeam.keycloak.storageproviders.CustomUserStorageProviderConstants.*;
 
+/**
+ * CustomUser storage provider factory.
+ *
+ * @author jkeam
+ */
 public class CustomUserStorageProviderFactory implements UserStorageProviderFactory<CustomUserStorageProvider> {
     private static final Logger log = LoggerFactory.getLogger(CustomUserStorageProviderFactory.class);
     protected final List<ProviderConfigProperty> configMetadata;

@@ -23,6 +23,11 @@ import org.keycloak.storage.user.UserRegistrationProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * CustomUser storage provider
+ *
+ * @author jkeam
+ */
 public class CustomUserStorageProvider implements UserStorageProvider,
         UserLookupProvider,
         CredentialInputValidator,
