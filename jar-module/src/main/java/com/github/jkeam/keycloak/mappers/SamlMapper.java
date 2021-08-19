@@ -28,9 +28,6 @@ public class SamlMapper extends AbstractProviderMapper implements IdentityProvid
 
     public static final String PROVIDER_ID = "saml-mapper";
     public static final String[] COMPATIBLE_PROVIDERS = {SAMLIdentityProviderFactory.PROVIDER_ID};
-    public static final String ATTRIBUTE_NAME = "attribute.name";
-    public static final String ATTRIBUTE_FRIENDLY_NAME = "attribute.friendly.name";
-    public static final String ATTRIBUTE_VALUE = "attribute.value";
 
     @Override
     public SamlMapper create(KeycloakSession session) {
@@ -85,26 +82,5 @@ public class SamlMapper extends AbstractProviderMapper implements IdentityProvid
         logger.info("updateBrokeredUser");
         user.setSingleAttribute("enriched", "yes");
         logger.info(user);
-    }
-
-    protected boolean isAttributePresent(IdentityProviderMapperModel mapperModel, BrokeredIdentityContext context) {
-        logger.trace("isAttributePresent");
-        String name = mapperModel.getConfig().get(ATTRIBUTE_NAME);
-        if (name != null && name.trim().equals("")) name = null;
-        String friendly = mapperModel.getConfig().get(ATTRIBUTE_FRIENDLY_NAME);
-        if (friendly != null && friendly.trim().equals("")) friendly = null;
-        String desiredValue = mapperModel.getConfig().get(ATTRIBUTE_VALUE);
-        AssertionType assertion = (AssertionType)context.getContextData().get(SAMLEndpoint.SAML_ASSERTION);
-        for (AttributeStatementType statement : assertion.getAttributeStatements()) {
-            for (AttributeStatementType.ASTChoiceType choice : statement.getAttributes()) {
-                AttributeType attr = choice.getAttribute();
-                if (name != null && !name.equals(attr.getName())) continue;
-                if (friendly != null && !friendly.equals(attr.getFriendlyName())) continue;
-                for (Object val : attr.getAttributeValue()) {
-                    if (val.equals(desiredValue)) return true;
-                }
-            }
-        }
-        return false;
     }
 }

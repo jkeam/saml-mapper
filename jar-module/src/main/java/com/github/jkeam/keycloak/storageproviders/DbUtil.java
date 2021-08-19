@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import static com.github.jkeam.keycloak.storageproviders.CustomUserStorageProviderConstants.*;
 
 /**
- * Database Utility
+ * Database Utility.
  *
  * @author jkeam
  */

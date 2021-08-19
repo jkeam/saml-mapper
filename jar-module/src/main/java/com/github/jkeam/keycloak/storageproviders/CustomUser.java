@@ -200,6 +200,7 @@ class CustomUser extends AbstractUserAdapter {
             case UserModel.ENABLED:
                 field = UserModel.ENABLED;
                 this.setEnabled(false);
+                break;
             default:
                 field = name;
         }
@@ -363,11 +364,16 @@ class CustomUser extends AbstractUserAdapter {
         private Boolean enabled;
         private Boolean emailVerified;
 
-        Builder(KeycloakSession session, RealmModel realm, ComponentModel storageProviderModel,String username) {
+        Builder(KeycloakSession session, RealmModel realm, ComponentModel storageProviderModel, String username) {
             this.session = session;
             this.realm = realm;
             this.storageProviderModel = storageProviderModel;
             this.username = username;
+        }
+
+        CustomUser.Builder username(String username) {
+            this.username = username;
+            return this;
         }
 
         CustomUser.Builder email(String email) {

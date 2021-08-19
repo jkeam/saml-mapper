@@ -19,29 +19,6 @@
             <version>${project.version}</version>
         </dependency>
     </dependencies>
-
-<!--    <build>-->
-<!--        <plugins>-->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-ear-plugin</artifactId>-->
-<!--                <version>2.10.1</version>-->
-<!--                <configuration>-->
-<!--                    <defaultLibBundleDir>lib</defaultLibBundleDir>-->
-<!--                    <modules>-->
-<!--                        <jarModule>-->
-<!--                            <groupId>com.github.jkeam</groupId>-->
-<!--                            <artifactId>saml-mapper-jar</artifactId>-->
-<!--                            <includeInApplicationXml>true</includeInApplicationXml>-->
-<!--                            <bundleFileName>saml-mapper-jar.jar</bundleFileName>-->
-<!--                            <bundleDir>/</bundleDir>-->
-<!--                        </jarModule>-->
-<!--                    </modules>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
-<!--    </build>-->
-
     <build>
         <plugins>
             <plugin>
@@ -51,7 +28,6 @@
                     <includeLibInApplicationXml>true</includeLibInApplicationXml>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>

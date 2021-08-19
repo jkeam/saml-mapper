@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * CustomUser storage provider
+ * CustomUser storage provider.
  *
  * @author jkeam
  */
@@ -36,29 +36,29 @@ public class CustomUserStorageProvider implements UserStorageProvider,
 {
 
     private static final Logger log = LoggerFactory.getLogger(CustomUserStorageProvider.class);
-    private KeycloakSession ksession;
-    private ComponentModel model;
+    private final KeycloakSession keycloakSession;
+    private final ComponentModel model;
 
-    public CustomUserStorageProvider(KeycloakSession ksession, ComponentModel model) {
-        this.ksession = ksession;
+    public CustomUserStorageProvider(KeycloakSession keycloakSession, ComponentModel model) {
+        this.keycloakSession = keycloakSession;
         this.model = model;
     }
 
     @Override
     public void close() {
-        log.info("[I30] close()");
+        log.info("close()");
     }
 
     @Override
     public UserModel getUserById(String id, RealmModel realm) {
-        log.info("[I35] getUserById({})",id);
+        log.info("getUserById({})", id);
         StorageId sid = new StorageId(id);
         return getUserByUsername(sid.getExternalId(),realm);
     }
 
     @Override
     public UserModel getUserByUsername(String username, RealmModel realm) {
-        log.info("[I41] getUserByUsername({})",username);
+        log.info("getUserByUsername({})", username);
         try ( Connection c = DbUtil.getConnection(this.model)) {
             PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email, birthDate from users where username = ?");
             st.setString(1, username);
@@ -78,7 +78,7 @@ public class CustomUserStorageProvider implements UserStorageProvider,
 
     @Override
     public UserModel getUserByEmail(String email, RealmModel realm) {
-        log.info("[I48] getUserByEmail({})",email);
+        log.info("getUserByEmail({})", email);
         try ( Connection c = DbUtil.getConnection(this.model)) {
             PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email, birthDate from users where email = ?");
             st.setString(1, email);
@@ -98,19 +98,19 @@ public class CustomUserStorageProvider implements UserStorageProvider,
 
     @Override
     public boolean supportsCredentialType(String credentialType) {
-        log.info("[I57] supportsCredentialType({})",credentialType);
+        log.info("supportsCredentialType({})", credentialType);
         return PasswordCredentialModel.TYPE.endsWith(credentialType);
     }
 
     @Override
     public boolean isConfiguredFor(RealmModel realm, UserModel user, String credentialType) {
-        log.info("[I57] isConfiguredFor(realm={},user={},credentialType={})", new Object[]{realm.getName(), user.getUsername(), credentialType});
+        log.info("isConfiguredFor(realm={},user={},credentialType={})", new Object[]{realm.getName(), user.getUsername(), credentialType});
         return supportsCredentialType(credentialType);
     }
 
     @Override
     public boolean isValid(RealmModel realm, UserModel user, CredentialInput credentialInput) {
-        log.info("[I57] isValid(realm={},user={},credentialInput.type={})", new Object[]{realm.getName(), user.getUsername(), credentialInput.getType()});
+        log.info("isValid(realm={},user={},credentialInput.type={})", new Object[]{realm.getName(), user.getUsername(), credentialInput.getType()});
         if (!this.supportsCredentialType(credentialInput.getType())) {
             return false;
         }
@@ -139,7 +139,7 @@ public class CustomUserStorageProvider implements UserStorageProvider,
 
     @Override
     public int getUsersCount(RealmModel realm) {
-        log.info("[I93] getUsersCount: realm={}", realm.getName() );
+        log.info("getUsersCount: realm={}", realm.getName());
         try ( Connection c = DbUtil.getConnection(this.model)) {
             Statement st = c.createStatement();
             st.execute("select count(*) from users");
@@ -159,7 +159,7 @@ public class CustomUserStorageProvider implements UserStorageProvider,
 
     @Override
     public List<UserModel> getUsers(RealmModel realm, int firstResult, int maxResults) {
-        log.info("[I113] getUsers: realm={}", realm.getName());
+        log.info("getUsers: realm={}", realm.getName());
 
         try ( Connection c = DbUtil.getConnection(this.model)) {
             PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email, birthDate from users order by username limit ? offset ?");
@@ -185,7 +185,7 @@ public class CustomUserStorageProvider implements UserStorageProvider,
 
     @Override
     public List<UserModel> searchForUser(String search, RealmModel realm, int firstResult, int maxResults) {
-        log.info("[I139] searchForUser: realm={}", realm.getName());
+        log.info("searchForUser: realm={}", realm.getName());
 
         try ( Connection c = DbUtil.getConnection(this.model)) {
             PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email, birthDate from users where username like ? order by username limit ? offset ?");
@@ -232,7 +232,7 @@ public class CustomUserStorageProvider implements UserStorageProvider,
 
     @Override
     public UserModel addUser(RealmModel realm, String username) {
-        log.info("[I139] addUser: realm={}", realm.getName());
+        log.info("addUser: realm={}", realm.getName());
         try ( Connection c = DbUtil.getConnection(this.model)) {
             String statement = "insert into users (username) values (?)";
             PreparedStatement st = c.prepareStatement(statement);
@@ -248,7 +248,7 @@ public class CustomUserStorageProvider implements UserStorageProvider,
 
     @Override
     public boolean removeUser(RealmModel realm, UserModel user) {
-        log.info("[I139] removeUser: realm={}", realm.getName());
+        log.info("removeUser: realm={}", realm.getName());
         StorageId sid = new StorageId(user.getId());
         String username = sid.getExternalId();
         try ( Connection c = DbUtil.getConnection(this.model)) {
@@ -266,7 +266,7 @@ public class CustomUserStorageProvider implements UserStorageProvider,
     }
 
     private UserModel mapUser(RealmModel realm, ResultSet rs) throws SQLException {
-        return new CustomUser.Builder(ksession, realm, model, rs.getString("username"))
+        return new CustomUser.Builder(keycloakSession, realm, model, rs.getString("username"))
                 .email(rs.getString("email"))
                 .firstName(rs.getString("firstName"))
                 .lastName(rs.getString("lastName"))
@@ -275,7 +275,7 @@ public class CustomUserStorageProvider implements UserStorageProvider,
     }
 
     private UserModel mapUser(RealmModel realm, String username) throws SQLException {
-        return new CustomUser.Builder(ksession, realm, model, username)
+        return new CustomUser.Builder(keycloakSession, realm, model, username)
                 .email(realm.getAttribute("email"))
                 .firstName(realm.getAttribute("firstName"))
                 .lastName(realm.getAttribute("lastName"))

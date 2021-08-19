@@ -5,9 +5,6 @@
     <groupId>com.github.jkeam</groupId>
     <artifactId>saml-mapper</artifactId>
     <version>1.0.0</version>
-    <!--
-    <packaging>jar</packaging>
-    -->
     <packaging>pom</packaging>
     <modules>
         <module>ear-module</module>

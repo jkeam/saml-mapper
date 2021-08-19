@@ -26,7 +26,7 @@ public class CustomUserStorageProviderFactory implements UserStorageProviderFact
     protected final List<ProviderConfigProperty> configMetadata;
 
     public CustomUserStorageProviderFactory() {
-        log.info("[I24] CustomUserStorageProviderFactory created");
+        log.info("CustomUserStorageProviderFactory created");
 
         // Create config metadata
         configMetadata = ProviderConfigurationBuilder.create()
@@ -34,7 +34,6 @@ public class CustomUserStorageProviderFactory implements UserStorageProviderFact
                 .name(CONFIG_KEY_JDBC_DRIVER)
                 .label("JDBC Driver Class")
                 .type(ProviderConfigProperty.STRING_TYPE)
-                // .defaultValue("org.h2.Driver")
                 .defaultValue("com.mysql.jdbc.Driver")
                 .helpText("Fully qualified class name of the JDBC driver")
                 .add()
@@ -42,7 +41,6 @@ public class CustomUserStorageProviderFactory implements UserStorageProviderFact
                 .name(CONFIG_KEY_JDBC_URL)
                 .label("JDBC URL")
                 .type(ProviderConfigProperty.STRING_TYPE)
-                // .defaultValue("jdbc:h2:mem:customdb")
                 .defaultValue("jdbc:mysql://192.168.1.11:3306/custom_keycloak")
                 .helpText("JDBC URL used to connect to the user database")
                 .add()
@@ -72,17 +70,16 @@ public class CustomUserStorageProviderFactory implements UserStorageProviderFact
     }
 
     @Override
-    public CustomUserStorageProvider create(KeycloakSession ksession, ComponentModel model) {
-        log.info("[I63] creating new CustomUserStorageProvider");
-        return new CustomUserStorageProvider(ksession,model);
+    public CustomUserStorageProvider create(KeycloakSession keycloakSession, ComponentModel model) {
+        log.info("creating new CustomUserStorageProvider");
+        return new CustomUserStorageProvider(keycloakSession,model);
     }
 
     @Override
     public String getId() {
-        log.info("[I69] getId()");
+        log.info("getId()");
         return "custom-user-provider";
     }
-
 
     // Configuration support methods
     @Override
@@ -94,13 +91,13 @@ public class CustomUserStorageProviderFactory implements UserStorageProviderFact
     public void validateConfiguration(KeycloakSession session, RealmModel realm, ComponentModel config) throws ComponentValidationException {
 
         try (Connection c = DbUtil.getConnection(config)) {
-            log.info("[I84] Testing connection..." );
+            log.info("Testing connection..." );
             c.createStatement().execute(config.get(CONFIG_KEY_VALIDATION_QUERY));
-            log.info("[I92] Connection OK !" );
+            log.info("Connection OK!" );
         }
         catch(Exception ex) {
             log.warn(ex.toString());
-            log.warn("[W94] Unable to validate connection: ex={}", ex.getMessage());
+            log.warn("Unable to validate connection: ex={}", ex.getMessage());
             log.warn(Arrays.toString(ex.getStackTrace()));
             throw new ComponentValidationException("Unable to validate database connection",ex);
         }
@@ -108,11 +105,11 @@ public class CustomUserStorageProviderFactory implements UserStorageProviderFact
 
     @Override
     public void onUpdate(KeycloakSession session, RealmModel realm, ComponentModel oldModel, ComponentModel newModel) {
-        log.info("[I94] onUpdate()" );
+        log.info("onUpdate()" );
     }
 
     @Override
     public void onCreate(KeycloakSession session, RealmModel realm, ComponentModel model) {
-        log.info("[I99] onCreate()" );
+        log.info("onCreate()" );
     }
 }
