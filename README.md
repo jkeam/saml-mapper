@@ -40,10 +40,13 @@ create table if not exists users(
 ### Keycloak
 
 1. Edit `start_keycloak.sh`.  There is a current limitation that the keycloak container requires the IP address of your machine so that it can connect to the database.  As such, edit `start_keycloak.sh` to replace with your own IP address.
-2. Run the script
+2. Run the script, and fully wait until it is up.  It will take a few minutes.
 ```dtd
 ./start_keycloak.sh
 ```
+3.  Open [management web console](http://localhost:8180/auth/admin/) and login with username `admin` and password `admin`
+4.  Download this file named [quarkus-realm.json](https://raw.githubusercontent.com/jkeam/quarkus-keycloak/main/config/quarkus-realm.json)
+5.  Add Realm and import the `quarkus-realm.json` file you just downloaded
 
 ## Build
 
