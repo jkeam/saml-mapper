@@ -13,7 +13,7 @@ docker-compose up
 
 Wait for the logs to settle and navigate to [adminer](http://localhost:8280/?server=db).
 
-Enter in the following login information.
+Enter the following login information.
 
 | System   | MySQL   |
 -----------|----------
@@ -38,7 +38,12 @@ create table if not exists users(
 ```
 
 ### Keycloak
-Edit the `start_keycloak.sh` shell script to replace with your own IP address and then run the script.
+
+1. Edit `start_keycloak.sh`.  There is a current limitation that the keycloak container requires the IP address of your machine so that it can connect to the database.  As such, edit `start_keycloak.sh` to replace with your own IP address.
+2. Run the script
+```dtd
+./start_keycloak.sh
+```
 
 ## Build
 
@@ -48,7 +53,7 @@ mvn clean package
 
 ## Deploy
 
-Assuming `keycloak` is the name of your _running_ docker container.
+Wait for the build to complete.  Next run the following command.  Note, we are assuming `keycloak` is the name of your running docker container; which if you followed the instructions above it is.
 
 ```shell
 docker cp ./ear-module/target/saml-mapper-ear.ear keycloak:/opt/jboss/keycloak/standalone/deployments
