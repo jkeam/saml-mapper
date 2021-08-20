@@ -60,7 +60,7 @@ public class CustomUserStorageProvider implements UserStorageProvider,
     public UserModel getUserByUsername(String username, RealmModel realm) {
         log.info("getUserByUsername({})", username);
         try ( Connection c = DbUtil.getConnection(this.model)) {
-            PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email, birthDate from users where username = ?");
+            PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email, birthDate, enriched from users where username = ?");
             st.setString(1, username);
             st.execute();
             ResultSet rs = st.getResultSet();
@@ -80,7 +80,7 @@ public class CustomUserStorageProvider implements UserStorageProvider,
     public UserModel getUserByEmail(String email, RealmModel realm) {
         log.info("getUserByEmail({})", email);
         try ( Connection c = DbUtil.getConnection(this.model)) {
-            PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email, birthDate from users where email = ?");
+            PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email, birthDate, enriched from users where email = ?");
             st.setString(1, email);
             st.execute();
             ResultSet rs = st.getResultSet();
@@ -162,7 +162,7 @@ public class CustomUserStorageProvider implements UserStorageProvider,
         log.info("getUsers: realm={}", realm.getName());
 
         try ( Connection c = DbUtil.getConnection(this.model)) {
-            PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email, birthDate from users order by username limit ? offset ?");
+            PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email, birthDate, enriched from users order by username limit ? offset ?");
             st.setInt(1, maxResults);
             st.setInt(2, firstResult);
             st.execute();
@@ -188,7 +188,7 @@ public class CustomUserStorageProvider implements UserStorageProvider,
         log.info("searchForUser: realm={}", realm.getName());
 
         try ( Connection c = DbUtil.getConnection(this.model)) {
-            PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email, birthDate from users where username like ? order by username limit ? offset ?");
+            PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email, birthDate, enriched from users where username like ? order by username limit ? offset ?");
             st.setString(1, search);
             st.setInt(2, maxResults);
             st.setInt(3, firstResult);
@@ -271,6 +271,7 @@ public class CustomUserStorageProvider implements UserStorageProvider,
                 .firstName(rs.getString("firstName"))
                 .lastName(rs.getString("lastName"))
                 .birthDate(rs.getDate("birthDate"))
+                .enriched(rs.getString("enriched"))
                 .build();
     }
 
@@ -279,6 +280,7 @@ public class CustomUserStorageProvider implements UserStorageProvider,
                 .email(realm.getAttribute("email"))
                 .firstName(realm.getAttribute("firstName"))
                 .lastName(realm.getAttribute("lastName"))
+                .enriched(realm.getAttribute("enriched"))
                 .build();
     }
 }

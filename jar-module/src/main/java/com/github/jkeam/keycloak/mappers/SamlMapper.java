@@ -72,9 +72,10 @@ public class SamlMapper extends AbstractProviderMapper implements IdentityProvid
     }
 
     @Override
-    public void updateBrokeredUserLegacy(KeycloakSession keycloakSession, RealmModel realmModel, UserModel userModel, IdentityProviderMapperModel identityProviderMapperModel, BrokeredIdentityContext brokeredIdentityContext) {
+    public void updateBrokeredUserLegacy(KeycloakSession keycloakSession, RealmModel realmModel, UserModel user, IdentityProviderMapperModel identityProviderMapperModel, BrokeredIdentityContext brokeredIdentityContext) {
         logger.info("updateBrokeredUserLegacy");
-        logger.info(userModel);
+        user.setSingleAttribute("enriched", "yes");
+        logger.info(user);
     }
 
     @Override
